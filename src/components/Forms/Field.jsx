@@ -6,7 +6,7 @@ const Field = ({ label, htmlFor, children, error }) => {
     <div className="flex flex-col">
       {label && <label className="text-lg font-medium" htmlFor={id}>{label}</label>}
       {children}
-      {!!error && <div>{error.message}</div>}
+      {!!error && <div className="text-red-500 font-medium">{error.message}</div>}
     </div>
   );
 };
