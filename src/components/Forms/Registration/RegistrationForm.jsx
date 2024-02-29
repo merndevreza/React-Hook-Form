@@ -1,6 +1,7 @@
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm, Controller } from "react-hook-form";
 import Field from "../Field";
 import Fieldset from "../Fieldset";
+import NumberInput from "../NumberInput";
 
 const RegistrationForm = () => {
   const {
@@ -18,7 +19,7 @@ const RegistrationForm = () => {
   const submitForm = (formData) => {
     console.log(formData);
   };
- 
+
   return (
     <form
       onSubmit={handleSubmit(submitForm)}
@@ -38,23 +39,37 @@ const RegistrationForm = () => {
           />
         </Field>
         <Field label="Age" error={errors.age}>
-          <input
-            {...register("age", {
+          <Controller
+            control={control}
+            name="age"
+            render={({ field: { ref, ...field } }) => (
+              <NumberInput
+                id="age"
+                className={`border-2 p-2 rounded ${
+                  errors.age ? "border-red-500" : "border-green-400 "
+                }`}
+                {...field}
+                placeholder="Enter Age"
+              />
+            )}
+            rules={{
               required: "Age is required",
               max: {
                 value: 100,
                 message: "Age must be between 0 and 100",
               },
-            })}
-            className={`border-2 p-2 rounded ${
-              errors.age ? "border-red-500" : "border-green-400 "
-            }`}
-            type="number"
-            name="age"
-            id="age"
-            placeholder="Enter Age"
+            }}
           />
         </Field>
+        <Field label="Picture" error={errors.picture}>
+          <input
+            {...register("picture", { required: "Picture is required" })} 
+            type="file"
+            name="picture"
+            id="picture" 
+          />
+        </Field>
+
         <Field label="Email" error={errors.email}>
           <input
             {...register("email", { required: "Emil is required" })}
@@ -109,12 +124,19 @@ const RegistrationForm = () => {
                   id={`socials[${index}].url`}
                 />
               </Field>
-              <button onClick={()=>remove(index)} className="p-2 bg-red-600 m-2 ">X</button>
+              <button
+                type="button"
+                onClick={() => remove(index)}
+                className="p-2 bg-red-500 mt-7 rounded-full w-[40px] h-[40px]"
+              >
+                X
+              </button>
             </div>
           ))}
         <button
+          type="button"
           onClick={() => append({ name: "", url: "" })}
-          className="px-3 py-1 bg-orange-500 rounded"
+          className="px-3 py-1 bg-orange-500 rounded my-4 "
         >
           @ Add a social handle
         </button>
